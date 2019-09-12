@@ -3,7 +3,7 @@
 // difine global variables that will be use throughout the code                                                        *
 // *********************************************************************************************************************
 var csv_file_API = './UsersSample.csv';
-var excel_file_API = './soccer_players.xlsx';
+// var excel_file_API = './soccer_players.xlsx';
 
 // Do some stuff when page hmtl page is launched
 $(document).ready(function () {
@@ -99,7 +99,6 @@ $(document).ready(function () {
                 );
 
             });
-
 
         } // end: Ajax success API call
 
