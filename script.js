@@ -58,7 +58,6 @@ $(document).ready(function () {
                         value.CITY +
                     '</td>' +
                 '</tr>'
-
             );
 
         });
