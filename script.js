@@ -11,49 +11,32 @@ $(document).ready(function () {
     $("#headerTitle").hide(300).show(1500);
 
     // read Excel file and convert to json format
-    $.ajax({
+    fetch('./soccer_players.xlsx').then(function (res) {
+        /* get the data as a Blob */
+        if (!res.ok) throw new Error("fetch failed");
+        return res.arrayBuffer();
+    }).then(function (ab) {
+        /* parse the data when it is received */
+        var data = new Uint8Array(ab);
+        var workbook = XLSX.read(data, {
+            type: "array"
+        });
 
-        type: 'GET',
+        /* DO SOMETHING WITH workbook HERE */
+        /* *****************************************************************
+        *    Converting Excel value to Json                                *
+        ********************************************************************/
+        var first_sheet_name = workbook.SheetNames[0];
+        /* Get worksheet */
+        var worksheet = workbook.Sheets[first_sheet_name];
 
-        url: excel_file_API,
+        var _JsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        /************************ End of conversion ************************/
 
-        dataType: 'text',
+        console.log(_JsonData);
+    });
 
-        error: function (e) {
-            alert('An error occurred while processing API calls');
-            console.log("API call Failed: ", e);
-        },
-
-        success: function (data) {
-
-            // To read the excel file we use the read method in SheetJs
-            var workbook = XLSX.read(data,
-                {
-                    type: 'binary',
-                    cellDates: true,
-                    cellNF: false,
-                    cellText: false
-                }
-            );
-
-            /* *****************************************************************
-            *    Converting Excel value to Json                                *
-            ********************************************************************/
-            var first_sheet_name = workbook.SheetNames[0];
-            /* Get worksheet */
-            var worksheet = workbook.Sheets[first_sheet_name];
-
-            var _JsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-            /************************ End of conversion ************************/
-
-            console.log(_JsonData);
-            
-
-        } // end: Ajax success API call
-
-    }); // end: of Ajax call
-
-    // read csc file and convert to json format
+    // read csv file and convert to json format
     $.ajax({
 
         type: 'GET',
