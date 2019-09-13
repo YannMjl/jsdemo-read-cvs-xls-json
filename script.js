@@ -90,16 +90,12 @@ $(document).ready(function () {
 
                     '<li class="list-group-item d-flex justify-content-between align-items-center">' + 
                         
-                        '<span style="width: 15%; margin-right: 1.5rem; font-size: 1rem; font-weight: bold; color: #37474F">' +
+                        '<span style="width: 15%; font-size: 1rem; font-weight: bold; color: #37474F">' +
                             value['FIRST NAME'] +
                         '</span>' +
 
-                        '<span style="width: 15%; margin-right: 2rem; font-size: 1rem;  color: #37474F">' +
+                        '<span style="width: 15%; font-size: 1rem;  color: #37474F">' +
                             value['LAST NAME'] +
-                        '</span>' +
-
-                        '<span class="badge badge-primary badge-pill">' +
-                            value.CITY +
                         '</span>' +
 
                         '<span class="badge warning-color-dark badge-pill">' +
@@ -108,6 +104,14 @@ $(document).ready(function () {
 
                         '<span class="badge success-color-dark badge-pill">' +
                             value['EMAIL ADDRESS'] +
+                        '</span>' +
+
+                        '<span class="badge badge-primary badge-pill">' +
+                            value.CITY +
+                        '</span>' +
+
+                        '<span class="badge badge-primary badge-pill">' +
+                            value.STATE +
                         '</span>' +
 
                     '</li>'
