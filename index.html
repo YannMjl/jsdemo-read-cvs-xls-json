@@ -16,8 +16,9 @@
         <!-- <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
         <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.6/js/mdb.min.js"></script> -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.3/jquery.csv.min.js"></script>
-        <script type="text/javascript" lang="javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+        <script type="text/javascript" lang="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.0/bluebird.min.js"></script>
     </head>
 
     <body>
@@ -25,33 +26,17 @@
         <div>
 
             <div class="jumbotron" style="text-align: center;">
-                <h1 id="headerTitle">CSV & Excel 2 JSON Demo</h1>
+                <h1 id="headerTitle">CSV & Polyfill | Cross Browsers Demo</h1>
             </div>
 
             <div class="justify-content-center" style="width: 100%; padding: 0 8rem">
 
                 <div class="p-3" style="width:100hw; padding: 1rem">
-                    <h2>CSV File Data</h2>
+                    <h2>Data from 2 CSV Files</h2>
                     <ul class="list-group" id="showCSV" >
                     
                     </ul>
 
-                </div>
-
-                <div class="p-3" style="width: 100hw; padding: 1rem">
-                    <h2>Excel File Data</h2>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Age</th>
-                                <th>Club</th>
-                                <th>City</th>
-                            </tr>
-                        </thead>
-                        <tbody id="showExcel"></tbody>
-                    </table>
                 </div>
 
             </div>

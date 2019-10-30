@@ -2,125 +2,129 @@
 // Global variables                                                                                                    *
 // difine global variables that will be use throughout the code                                                        *
 // *********************************************************************************************************************
-var csv_file_API = './UsersSample.csv';
-var excel_file_API = './soccer_players.xlsx';
+var csv_file_API_1 = "./UsersSample.csv";
+var csv_file_API_2 = "./team2.csv";
+var APIs_array = [csv_file_API_1, csv_file_API_2];
+
+
+// Flatten our data down to 1 array
+Object.defineProperty(Array.prototype, 'flat',
+    {
+        value: function (depth) {
+            depth = 1;
+            return this.reduce(
+                function (flat, toFlatten) {
+                    return flat.concat((Array.isArray(toFlatten) && (depth > 1)) ? toFlatten.flat(depth - 1) : toFlatten);
+                }, []
+            );
+        },
+        configurable: true
+});
+
 
 // Do some stuff when page hmtl page is launched
 $(document).ready(function () {
 
     $("#headerTitle").hide(300).show(1500);
 
-    // read Excel file and convert to json format using fetch
-    fetch('./soccer_players.xlsx').then(function (res) {
-        /* get the data as a Blob */
-        if (!res.ok) throw new Error("fetch failed");
-        return res.arrayBuffer();
-    })
-    .then(function (ab) {
-        /* parse the data when it is received */
-        var data = new Uint8Array(ab);
-        var workbook = XLSX.read(data, {
-            type: "array"
-        });
+    makeAPICalls();
 
-        /* *****************************************************************
-        * DO SOMETHING WITH workbook: Converting Excel value to Json       *
-        ********************************************************************/
-        var first_sheet_name = workbook.SheetNames[0];
-        /* Get worksheet */
-        var worksheet = workbook.Sheets[first_sheet_name];
+}); // end: document.ready()
 
-        var _JsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-        /************************ End of conversion ************************/
+function makeAPICalls() {
 
-        console.log(_JsonData);
+    // The array to contain our api calls
+    var calls = [];
 
-        $.each(_JsonData, function (index, value) {
+    // Passing csv files APIs to callback functions
+    APIs_array.forEach(function (csv_file_API) {
 
-            $('#showExcel').append(
+        // Append the promise onto our array of api calls
+        calls.push(new Promise(function (resolve, reject) {
 
-                '<tr>' +
-                    '<th scope="row">' +
-                        value['FIRST NAME'] +
-                    '</th>' + 
-                    '<td>' +
-                        value['LAST NAME'] +
-                    '</td>' +  
-                    '<td>' +
-                        '<span class="badge badge-primary badge-pill p-2">' +
-                            value.AGE +
-                        '</span>' +
-                    '</td>' +
-                    '<td>' +
-                        value.CLUB +
-                    '</td>' +
-                    '<td>' +
-                        value.CITY +
-                    '</td>' +
-                '</tr>'
-            );
+            // make the API call using AJAX
+            $.ajax({
 
-        });
+                type: "GET",
+
+                url: csv_file_API,
+
+                dataType: "text",
+
+                cache: false,
+
+                error: function (e) {
+                    alert("An error occurred while processing API calls");
+                    console.log("API call Failed: ", e);
+                    reject(e);
+                },
+
+                success: function (data) {
+
+                    var jsonData = $.csv.toObjects(data);
+
+                    console.log(jsonData);
+
+                    resolve(jsonData);
+                } // end: data process on success API call
+
+            }); // end: AJAX call
+
+        })); // end: adding data on promise calls
+
+    }); // end: loop APIs array
+
+
+    // Once all api calls are completed
+    Promise.all(calls).then(function (data) {
+
+        // flat the data into one
+        var flatData = data.map(function (item) {
+            return item;
+        }).flat();
+
+        console.log(flatData);
+
+        dislayData(flatData);
+    });
+
+}
+
+function dislayData(data) {
+    
+    $.each(data, function (index, value) {
+
+        $('#showCSV').append(
+
+            '<li class="list-group-item d-flex justify-content-between align-items-center">' +
+
+                '<span style="width: 15%; font-size: 1rem; font-weight: bold; color: #37474F">' +
+                    value['FIRST NAME'] +
+                '</span>' +
+
+                '<span style="width: 15%; font-size: 1rem;  color: #37474F">' +
+                    value['LAST NAME'] +
+                '</span>' +
+
+                '<span class="badge warning-color-dark badge-pill">' +
+                    value['PHONE NUMBER'] +
+                '</span>' +
+
+                '<span class="badge success-color-dark badge-pill">' +
+                    value['EMAIL ADDRESS'] +
+                '</span>' +
+
+                '<span class="badge badge-primary badge-pill">' +
+                    value.CITY +
+                '</span>' +
+
+                '<span class="badge badge-primary badge-pill">' +
+                    value.STATE +
+                '</span>' +
+
+            '</li>'
+        );
 
     });
 
-    // read csv file and convert to json format using ajax
-    $.ajax({
-
-        type: 'GET',
-
-        url: csv_file_API,
-
-        dataType: 'text',
-
-        error: function (e) {
-            alert('An error occurred while processing API calls');
-            console.log("API call Failed: ", e);
-        },
-
-        success: function (data) {
-
-            var jsonData = $.csv.toObjects(data);
-
-            console.log(jsonData);
-
-            $.each(jsonData, function (index, value) {
-
-                $('#showCSV').append(
-
-                    '<li class="list-group-item d-flex justify-content-between align-items-center">' + 
-                        
-                        '<span style="width: 15%; font-size: 1rem; font-weight: bold; color: #37474F">' +
-                            value['FIRST NAME'] +
-                        '</span>' +
-
-                        '<span style="width: 15%; font-size: 1rem;  color: #37474F">' +
-                            value['LAST NAME'] +
-                        '</span>' +
-
-                        '<span class="badge warning-color-dark badge-pill">' +
-                            value['PHONE NUMBER'] +
-                        '</span>' +
-
-                        '<span class="badge success-color-dark badge-pill">' +
-                            value['EMAIL ADDRESS'] +
-                        '</span>' +
-
-                        '<span class="badge badge-primary badge-pill">' +
-                            value.CITY +
-                        '</span>' +
-
-                        '<span class="badge badge-primary badge-pill">' +
-                            value.STATE +
-                        '</span>' +
-
-                    '</li>'
-                );
-
-            });
-
-        } // end: Ajax success API call
-
-    }); // end: of Ajax call
-
-}); // end: document.ready()
+}
